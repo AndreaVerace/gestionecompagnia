@@ -1,12 +1,14 @@
 package it.prova.gestionecompagnia.dao.compagnia;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import it.prova.gestionecompagnia.connection.MyConnection;
 import it.prova.gestionecompagnia.dao.AbstractMySQLDAO;
 import it.prova.gestionecompagnia.model.Compagnia;
 
@@ -46,8 +48,34 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 
 	@Override
 	public Compagnia get(Long idInput) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(idInput == 0) {
+			throw new Exception("id non puo essere 0.");
+		}
+		
+		Compagnia result = null;
+		try (PreparedStatement ps = connection.prepareStatement("select * from compagnia where id=?")) {
+			
+			ps.setLong(1, idInput);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					result = new Compagnia();
+					result.setId(rs.getLong("id"));
+					result.setRagioneSociale(rs.getString("ragionesociale"));
+					result.setFatturatoAnnuo(rs.getInt("fatturatoannuo"));
+					result.setDataFondazione(rs.getDate("datafondazione"));
+					
+				}
+			}
+		}   	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override

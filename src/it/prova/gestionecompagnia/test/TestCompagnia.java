@@ -28,6 +28,8 @@ public class TestCompagnia {
 			
 			testListImpiegato(impiegatoDAOInstance);
 			
+			testGetCompagnia(compagniaDAOInstance);
+			
 		}	catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,4 +52,16 @@ public class TestCompagnia {
 		System.out.println("al momento sono presenti : " + result + " impiegati.");
 	}
 	
+	
+	public static void testGetCompagnia(CompagniaDAO compagniaDAOInstance) throws Exception {
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testGetCompagnia : FAILED, non ci sono voci sul DB");
+		}
+		long id = compagniaDAOInstance.list().get(2).getId();
+		
+		Compagnia daPrendere = compagniaDAOInstance.get(id);
+		
+		System.out.println(daPrendere);
+	}
 }

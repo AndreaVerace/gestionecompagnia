@@ -40,9 +40,7 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 				
 				Compagnia compagniaTemp = new Compagnia();
 				compagniaTemp.setId(rs.getLong("id"));
-				compagniaTemp.setRagioneSociale(rs.getString("ragionesociale"));
-				compagniaTemp.setFatturatoAnnuo(rs.getInt("fatturatoannuo"));
-				compagniaTemp.setDataFondazione(rs.getDate("datafondazione"));
+				
 				
 				impiegatoTemp.setCompagnia(compagniaTemp);
 				
