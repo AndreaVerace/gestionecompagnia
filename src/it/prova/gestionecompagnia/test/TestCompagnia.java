@@ -40,7 +40,15 @@ public class TestCompagnia {
 			
 			// testInsertCompagnia(compagniaDAOInstance);
 			
-			testInsertImpiegato(impiegatoDAOInstance);
+			// testInsertImpiegato(impiegatoDAOInstance);
+			
+			//testDeleteImpiegato(impiegatoDAOInstance);
+			
+			// // // // testDeleteCompagnia(compagniaDAOInstance); \\ \\ \\ \\ \\
+			
+			// testFindByExampleCompagnia(compagniaDAOInstance);
+			
+			testFindByExampleImpiegato(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -163,6 +171,86 @@ public class TestCompagnia {
 		
 		for(Impiegato imp : impiegatoDAOInstance.list()) {
 			System.out.println(imp);
+		}
+	}
+	
+	
+	public static void testDeleteCompagnia(CompagniaDAO compagniaDAOInstance) throws Exception {
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Compagnia daEliminare = compagniaDAOInstance.list().get(3);
+		
+		
+		int result = compagniaDAOInstance.delete(daEliminare);
+		
+		if(result < 1) {
+			throw new Exception("testDeleteImpiegato : FAILED");
+		}
+	}
+	
+	
+	public static void testDeleteImpiegato(ImpiegatoDAO impiegatoDAOInstance) throws Exception {
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Impiegato daEliminare = impiegatoDAOInstance.list().get(5);
+		
+		int result = impiegatoDAOInstance.delete(daEliminare);
+		
+		if(result < 1) {
+			throw new Exception("testDeleteImpiegato : FAILED");
+		}
+	}
+	
+	public static void testFindByExampleCompagnia(CompagniaDAO compagniaDAOInstance) throws Exception {
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataFondazione = new SimpleDateFormat("dd-MM-yyyy").parse("06-06-1980");
+		
+		Compagnia daRicercare = new Compagnia("OB",250000,dataFondazione);
+		
+		
+		List<Compagnia> listaResult = compagniaDAOInstance.findByExample(daRicercare);
+		
+		if( listaResult.size() < 1) {
+			throw new Exception("testFindByExampleCompagnia : FAILED");
+		}
+		
+		for(Compagnia comp : listaResult) {
+			System.out.println(comp);
+		}
+	}
+	
+	
+	public static void testFindByExampleImpiegato(ImpiegatoDAO impiegatoDAOInstance) throws Exception {
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testFindByExampleImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("02-01-1970");
+		Date dataAssunzione = new SimpleDateFormat("dd-MM-yyyy").parse("12-09-1999");
+		
+		Impiegato daRicercare = new Impiegato("FA","BE","FB",dataNascita,dataAssunzione);
+		
+		
+		
+		List<Impiegato> listaResult = impiegatoDAOInstance.findByExample(daRicercare);
+		
+		if( listaResult.size() < 1) {
+			throw new Exception("testFindByExampleCompagnia : FAILED");
+		}
+		
+		for(Impiegato comp : listaResult) {
+			System.out.println(comp);
 		}
 	}
 }

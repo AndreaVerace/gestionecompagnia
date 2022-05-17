@@ -129,14 +129,68 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 
 	@Override
 	public int delete(Compagnia input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if(input.getId() < 1) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("delete from compagnia where id = ?")){
+			ps.setLong(1, input.getId());
+			
+			result = ps.executeUpdate();
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
-
+	
+	
 	@Override
 	public List<Compagnia> findByExample(Compagnia input) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(input == null)
+			throw new Exception("l'input iniziale non puo essere null");
+		
+		List<Compagnia> result = new ArrayList<>();
+		Compagnia compagniaTemp = null;
+		
+		String query = "select * from compagnia where 1 = 1  ";
+		
+		if(input.getRagioneSociale() != null || input.getRagioneSociale() != "") {
+			query += " and ragionesociale like '" + input.getRagioneSociale() + "%'";
+		}
+		
+		if(input.getFatturatoAnnuo() != 0) {
+			query += " and fatturatoannuo = '" + input.getFatturatoAnnuo() + "'";
+		}
+		
+		if(input.getDataFondazione() != null) {
+			query += " and datafondazione = '" + new java.sql.Date(input.getDataFondazione().getTime()) + "' ";
+		}
+		
+		//query += ";";
+		
+		try (Statement ps = connection.createStatement()) {
+			ResultSet rs = ps.executeQuery(query);
+		
+			while (rs.next()) {
+				compagniaTemp = new Compagnia();
+				compagniaTemp.setId(rs.getLong("id"));
+				compagniaTemp.setRagioneSociale(rs.getString("ragionesociale"));
+				compagniaTemp.setFatturatoAnnuo(rs.getInt("fatturatoannuo"));
+				compagniaTemp.setDataFondazione(rs.getDate("datafondazione"));
+				
+				result.add(compagniaTemp);
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override

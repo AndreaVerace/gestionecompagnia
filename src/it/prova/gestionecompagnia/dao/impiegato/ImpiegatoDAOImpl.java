@@ -148,14 +148,88 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 
 	@Override
 	public int delete(Impiegato input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		if(input.getId() < 1) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("delete from impiegato where id = ?")){
+			ps.setLong(1, input.getId());
+			
+			result = ps.executeUpdate();
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override
 	public List<Impiegato> findByExample(Impiegato input) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(input == null)
+			throw new Exception("l'input iniziale non puo essere null");
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		
+		String query = "select * from impiegato where 1 = 1  ";
+		
+		if(input.getNome() != null || input.getNome() != "") {
+			query += " and nome like '" + input.getNome() + "%'";
+		}
+		
+		if(input.getCognome() != null) {
+			query += " and cognome like '" + input.getCognome() + "%'";
+		}
+		
+		if(input.getCodiceFiscale() != null) {
+			query += " and codicefiscale like '" + input.getCodiceFiscale() + "%'";
+		}
+		
+		if(input.getDataNascita() != null) {
+			query += " and datanascita = '" + new java.sql.Date(input.getDataNascita().getTime()) + "' ";
+		}
+		
+		if(input.getDataAssunzione() != null) {
+			query += " and dataassunzione = '" + new java.sql.Date(input.getDataAssunzione().getTime()) + "' ";
+		}
+		
+		if(input.getCompagnia() != null) {
+			query += " and compagnia_id = '" + input.getCompagnia().getId() + "' ";
+		}
+		
+		try (Statement ps = connection.createStatement()) {
+			ResultSet rs = ps.executeQuery(query);
+		
+			while (rs.next()) {
+				impiegatoTemp = new Impiegato();
+				impiegatoTemp.setId(rs.getLong("id"));
+				impiegatoTemp.setNome(rs.getString("nome"));
+				impiegatoTemp.setCognome(rs.getString("cognome"));
+				impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+				impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+				impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+				
+				
+				Compagnia compagniaTemp = new Compagnia();
+				compagniaTemp.setId(rs.getLong("id"));
+				
+				
+				impiegatoTemp.setCompagnia(compagniaTemp);
+				
+				
+				result.add(impiegatoTemp);
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
+		
 	}
 
 	@Override
