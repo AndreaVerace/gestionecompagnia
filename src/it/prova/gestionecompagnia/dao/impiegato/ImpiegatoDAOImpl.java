@@ -95,8 +95,31 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 
 	@Override
 	public int update(Impiegato input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(input == null || input.getId() < 1) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("update impiegato set nome = ?,cognome = ?,codicefiscale = ? where id = ?")) {
+			
+			
+			ps.setString(1, input.getNome());
+			ps.setString(2, input.getCognome());
+			ps.setString(3, input.getCodiceFiscale());
+			ps.setLong(4, input.getId());
+			
+			result = ps.executeUpdate();
+		
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
+		
 	}
 
 	@Override

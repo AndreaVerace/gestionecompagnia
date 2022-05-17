@@ -80,14 +80,51 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 
 	@Override
 	public int update(Compagnia input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(input == null || input.getId() < 1) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("update compagnia set ragionesociale = ?,fatturatoannuo = ?,datafondazione = ? where id = ?")) {
+			
+			
+			ps.setString(1, input.getRagioneSociale());
+			ps.setInt(2, input.getFatturatoAnnuo());
+			ps.setDate(3, new java.sql.Date(input.getDataFondazione().getTime()));
+			ps.setLong(4, input.getId());
+			
+			result = ps.executeUpdate();
+		
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override
 	public int insert(Compagnia input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		if(input == null) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("insert into compagnia (ragionesociale,fatturatoannuo,datafondazione) values(?,?,?)")){
+			
+			ps.setString(1, input.getRagioneSociale());
+			ps.setInt(2, input.getFatturatoAnnuo());
+			ps.setDate(3, new java.sql.Date(input.getDataFondazione().getTime()));
+			
+			result = ps.executeUpdate();
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override

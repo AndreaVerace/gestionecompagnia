@@ -16,13 +16,13 @@ public class Impiegato {
 		
 	}
 	
-	public Impiegato(String nome,String cognome,String codiceFiscale,Date dataNascita,Date dataAssunzione,Compagnia compagnia) {
+	public Impiegato(String nome,String cognome,String codiceFiscale,Date dataNascita,Date dataAssunzione) {
 		this.nome=nome;
 		this.cognome=cognome;
 		this.codiceFiscale=codiceFiscale;
 		this.dataNascita=dataNascita;
 		this.dataAssunzione=dataAssunzione;
-		this.compagnia=compagnia;
+		
 	}
 
 	public long getId() {

@@ -1,6 +1,8 @@
 package it.prova.gestionecompagnia.test;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import it.prova.gestionecompagnia.connection.MyConnection;
@@ -31,6 +33,13 @@ public class TestCompagnia {
 			testGetCompagnia(compagniaDAOInstance);
 			
 			testGetImpiegato(impiegatoDAOInstance);
+			
+			// testUpdateCompagnia(compagniaDAOInstance);
+			
+			// testUpdateImpiegato(impiegatoDAOInstance);
+			
+			testInsertCompagnia(compagniaDAOInstance);
+			
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -77,6 +86,64 @@ public class TestCompagnia {
 		Impiegato daPrendere = impiegatoDAOInstance.get(id);
 		
 		System.out.println(daPrendere);
+	}
+	
+	
+	public static void testUpdateCompagnia(CompagniaDAO compagniaDAOInstance) throws Exception {
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testUpdateCompagnia : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataFondazione = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2000");
+		
+		Compagnia daModificare = new Compagnia("AGUGLIA",700000,dataFondazione);
+		daModificare.setId((long) 2);
+		
+		int result = compagniaDAOInstance.update(daModificare);
+		
+		if(result < 1) {
+			throw new Exception("testUpdateCompagnia : FAILED");
+		}
+		System.out.println(compagniaDAOInstance.list().get(1));
+	}
+	
+	
+	public static void testUpdateImpiegato(ImpiegatoDAO impiegatoDAOInstance) throws Exception {
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testUpdateImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2000");
+		Date dataAssunzione = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-2022");
+		
+		Impiegato daModificare = new Impiegato("GIO","NERI","GVNNNR00",dataNascita,dataAssunzione);
+		daModificare.setId((long) 4);
+		
+		int result = impiegatoDAOInstance.update(daModificare);
+		
+		if(result < 1) {
+			throw new Exception("testUpdateImpiegato : FAILED");
+		}
+		System.out.println(impiegatoDAOInstance.list().get(3));
+	}
+	
+	public static void testInsertCompagnia(CompagniaDAO compagniaDAOInstance) throws Exception{
+		
+		Date dataFondazione = new SimpleDateFormat("dd-MM-yyyy").parse("13-05-1965");
+		
+		Compagnia daInserire = new Compagnia("AQUA",850000,dataFondazione);
+		
+		int result = compagniaDAOInstance.insert(daInserire);
+		
+		if(result < 1) {
+			throw new Exception("testInsertCompagnia : FAILED");
+		}
+		
+		for(Compagnia comp : compagniaDAOInstance.list()) {
+			System.out.println(comp);
+		}
 	}
 	
 }
