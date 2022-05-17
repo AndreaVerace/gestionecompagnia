@@ -1,6 +1,9 @@
 package it.prova.gestionecompagnia.dao.impiegato;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +19,42 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 
 	@Override
 	public List<Impiegato> list() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		
+		try (Statement ps = connection.createStatement(); ResultSet rs = ps.executeQuery("select * from impiegato")){
+			
+			while (rs.next()) {
+				impiegatoTemp = new Impiegato();
+				impiegatoTemp.setId(rs.getLong("id"));
+				impiegatoTemp.setNome(rs.getString("nome"));
+				impiegatoTemp.setCognome(rs.getString("cognome"));
+				impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+				impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+				impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+				
+				
+				Compagnia compagniaTemp = new Compagnia();
+				compagniaTemp.setId(rs.getLong("id"));
+				compagniaTemp.setRagioneSociale(rs.getString("ragionesociale"));
+				compagniaTemp.setFatturatoAnnuo(rs.getInt("fatturatoannuo"));
+				compagniaTemp.setDataFondazione(rs.getDate("datafondazione"));
+				
+				impiegatoTemp.setCompagnia(compagniaTemp);
+				
+				
+				result.add(impiegatoTemp);
+			}		
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+		
 	}
 
 	@Override

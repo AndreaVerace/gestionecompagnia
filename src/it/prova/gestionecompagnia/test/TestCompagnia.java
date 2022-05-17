@@ -10,6 +10,7 @@ import it.prova.gestionecompagnia.dao.compagnia.CompagniaDAOImpl;
 import it.prova.gestionecompagnia.dao.impiegato.ImpiegatoDAO;
 import it.prova.gestionecompagnia.dao.impiegato.ImpiegatoDAOImpl;
 import it.prova.gestionecompagnia.model.Compagnia;
+import it.prova.gestionecompagnia.model.Impiegato;
 
 public class TestCompagnia {
 
@@ -25,6 +26,7 @@ public class TestCompagnia {
 			
 			testListCompagnia(compagniaDAOInstance);
 			
+			testListImpiegato(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -38,6 +40,14 @@ public class TestCompagnia {
 		int result = listaCompagnie.size();
 		
 		System.out.println("al momento sono presenti : " + result + " compagnìe.");
+	}
+	
+	public static void testListImpiegato(ImpiegatoDAO impiegatoDAOInstance) throws Exception {
+		List<Impiegato> listaImpiegati = impiegatoDAOInstance.list();
+		
+		int result = listaImpiegati.size();
+		
+		System.out.println("al momento sono presenti : " + result + " impiegati.");
 	}
 	
 }
