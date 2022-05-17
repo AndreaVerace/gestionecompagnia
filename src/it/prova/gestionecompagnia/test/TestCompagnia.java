@@ -38,8 +38,9 @@ public class TestCompagnia {
 			
 			// testUpdateImpiegato(impiegatoDAOInstance);
 			
-			testInsertCompagnia(compagniaDAOInstance);
+			// testInsertCompagnia(compagniaDAOInstance);
 			
+			testInsertImpiegato(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -146,4 +147,22 @@ public class TestCompagnia {
 		}
 	}
 	
+	public static void testInsertImpiegato(ImpiegatoDAO impiegatoDAOInstance) throws Exception{
+		
+		Date dataNascita = new SimpleDateFormat("dd-MM-yyyy").parse("03-01-1970");
+		Date dataAssunzione = new SimpleDateFormat("dd-MM-yyyy").parse("13-09-1999");
+		
+		Impiegato daInserire = new Impiegato("FABIO","BELLINI","FBBLLN70",dataNascita,dataAssunzione);
+		daInserire.setCompagnia(impiegatoDAOInstance.list().get(0).getCompagnia());
+		
+		int result = impiegatoDAOInstance.insert(daInserire);
+		
+		if(result < 1) {
+			throw new Exception("testInsertCompagnia : FAILED");
+		}
+		
+		for(Impiegato imp : impiegatoDAOInstance.list()) {
+			System.out.println(imp);
+		}
+	}
 }

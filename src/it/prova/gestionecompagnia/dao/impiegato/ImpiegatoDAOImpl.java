@@ -124,8 +124,26 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 
 	@Override
 	public int insert(Impiegato input) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		if(input == null) {
+			throw new Exception("Errore inserimento dati da parte del cliente");
+		}
+		
+		int result = 0;
+		try (PreparedStatement ps = connection.prepareStatement("insert into impiegato (nome,cognome,codicefiscale,datanascita,dataassunzione,compagnia_id) values(?,?,?,?,?,?)")){
+			
+			ps.setString(1, input.getNome());
+			ps.setString(2, input.getCognome());
+			ps.setString(3, input.getCodiceFiscale());
+			ps.setDate(4, new java.sql.Date(input.getDataNascita().getTime()));
+			ps.setDate(5, new java.sql.Date(input.getDataAssunzione().getTime()));
+			ps.setLong(6, input.getCompagnia().getId());
+			
+			result = ps.executeUpdate();
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override
