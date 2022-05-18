@@ -55,6 +55,8 @@ public class TestCompagnia {
 			
 			// testFindAllByRagioneSocialeContiene(compagniaDAOInstance);
 			
+			testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
+			
 		}	catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -300,7 +302,29 @@ public class TestCompagnia {
 		
 		for(Compagnia c : result) {
 			System.out.println(c);
+		}	
+	}
+	
+	
+public static void testFindAllByCodiceFiscaleContiene(CompagniaDAO compagniaDAOInstance) throws Exception {
+		
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		String iniziale = "VRCNDR";
+		
+		List<Compagnia> result = compagniaDAOInstance.findAllByCodiceFiscaleContiene(iniziale);
+		
+		if(result.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Compagnia c : result) {
+			System.out.println(c);
 		}
 		
 	}
+	
 }

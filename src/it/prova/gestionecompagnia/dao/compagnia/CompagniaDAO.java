@@ -13,7 +13,7 @@ public interface CompagniaDAO extends IBaseDAO<Compagnia> {
 	
 	public List<Compagnia> findAllByRagioneSocialeContiene(String fraseInput) throws Exception;
 	
-	public List<Compagnia> findAllByCodiceFiscaleContiene(String fraseInput);
+	public List<Compagnia> findAllByCodiceFiscaleContiene(String fraseInput) throws Exception;
 	
 	public boolean verificaSeCompagniaPossiedeimpiegati(Compagnia input) throws Exception;
 	

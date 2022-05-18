@@ -330,9 +330,52 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 	}
 
 	@Override
-	public List<Compagnia> findAllByCodiceFiscaleContiene(String fraseInput) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Compagnia> findAllByCodiceFiscaleContiene(String fraseInput) throws Exception {
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(fraseInput == null || fraseInput == "")
+			throw new Exception("l'input iniziale non puo essere null");
+		
+		List<Compagnia> result = new ArrayList<>();
+		Compagnia compagniaTemp = null;
+		Impiegato impiegatoTemp = null;
+		
+		
+		try (PreparedStatement ps = connection.prepareStatement("select * from compagnia c inner join impiegato i on c.id = i.compagnia_id where codicefiscale like ? ")){
+			
+				
+			ps.setString(1, "%" + fraseInput + "%");
+			
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					impiegatoTemp = new Impiegato();
+					impiegatoTemp.setId(rs.getLong("id"));
+					impiegatoTemp.setNome(rs.getString("nome"));
+					impiegatoTemp.setCognome(rs.getString("cognome"));
+					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+					
+					compagniaTemp = new Compagnia();
+					compagniaTemp.setId(rs.getLong("id"));
+					compagniaTemp.setRagioneSociale(rs.getString("ragionesociale"));
+					compagniaTemp.setFatturatoAnnuo(rs.getInt("fatturatoannuo"));
+					compagniaTemp.setDataFondazione(rs.getDate("datafondazione"));
+					
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					result.add(compagniaTemp);
+				}
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+		
 	}
 
 }
