@@ -277,7 +277,7 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 	}
 
 	@Override
-	public List<Impiegato> countByDataFondazioneCompagniaGreaterThan(Date dataInput) throws Exception {
+	public int countByDataFondazioneCompagniaGreaterThan(Date dataInput) throws Exception {
 		if (isNotActive())
 			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
 		
@@ -285,7 +285,7 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 			throw new Exception("DATA non può essere null.");
 		}
 		
-		List<Impiegato> result = new ArrayList<>();
+		int result = 0;
 		Impiegato impiegatoTemp = null;
 		Compagnia compagniaTemp = null;
 		
@@ -295,21 +295,21 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 			
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					impiegatoTemp = new Impiegato();
-					impiegatoTemp.setId(rs.getLong("id"));
-					impiegatoTemp.setNome(rs.getString("nome"));
-					impiegatoTemp.setCognome(rs.getString("cognome"));
-					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
-					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
-					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+//					impiegatoTemp = new Impiegato();
+//					impiegatoTemp.setId(rs.getLong("id"));
+//					impiegatoTemp.setNome(rs.getString("nome"));
+//					impiegatoTemp.setCognome(rs.getString("cognome"));
+//					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+//					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+//					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+//					
+//					compagniaTemp = new Compagnia();
+//					compagniaTemp.setId(rs.getLong("id"));
+//					
+//					
+//					impiegatoTemp.setCompagnia(compagniaTemp);
 					
-					compagniaTemp = new Compagnia();
-					compagniaTemp.setId(rs.getLong("id"));
-					
-					
-					impiegatoTemp.setCompagnia(compagniaTemp);
-					
-					result.add(impiegatoTemp);
+					result++;
 				}
 			}
 		}	catch (Exception e) {

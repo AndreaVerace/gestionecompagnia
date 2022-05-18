@@ -58,7 +58,7 @@ public class TestCompagnia {
 			
 			// testFindAllByCompagnia(impiegatoDAOInstance);
 			
-			// testCountByDataFondazioneCompagniaGreaterThan(impiegatoDAOInstance);
+			 testCountByDataFondazioneCompagniaGreaterThan(impiegatoDAOInstance);
 			
 			// testFindAllByCompagniaConfatturatoMaggioreDi(impiegatoDAOInstance);
 			
@@ -362,15 +362,15 @@ public class TestCompagnia {
 		
 		Date dataInput = new SimpleDateFormat("dd-MM-yyyy").parse("06-06-2008");
 		
-		List<Impiegato> result = impiegatoDAOInstance.countByDataFondazioneCompagniaGreaterThan(dataInput);
+		int result = impiegatoDAOInstance.countByDataFondazioneCompagniaGreaterThan(dataInput);
 		
-		if(result.size() < 1) {
+		if(result < 1) {
 			throw new Exception("SBAGLIATO.");
 		}
 		
-		for(Impiegato c : result) {
-			System.out.println(c);
-		}
+		
+			System.out.println(result);
+		
 	}
 	
 	
