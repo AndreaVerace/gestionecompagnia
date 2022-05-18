@@ -305,11 +305,7 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 				while (rs.next()) {
 					impiegatoTemp = new Impiegato();
 					impiegatoTemp.setId(rs.getLong("id"));
-//					impiegatoTemp.setNome(rs.getString("nome"));
-//					impiegatoTemp.setCognome(rs.getString("cognome"));
-//					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
-//					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
-//					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+
 					
 					compagniaTemp = new Compagnia();
 					compagniaTemp.setId(rs.getLong("id"));
@@ -353,11 +349,6 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 				while (rs.next()) {
 					impiegatoTemp = new Impiegato();
 					impiegatoTemp.setId(rs.getLong("id"));
-//					impiegatoTemp.setNome(rs.getString("nome"));
-//					impiegatoTemp.setCognome(rs.getString("cognome"));
-//					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
-//					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
-//					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
 					
 					compagniaTemp = new Compagnia();
 					compagniaTemp.setId(rs.getLong("id"));
