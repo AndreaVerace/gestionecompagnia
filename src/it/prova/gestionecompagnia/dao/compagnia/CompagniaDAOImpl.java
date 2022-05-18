@@ -295,7 +295,7 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 		Impiegato impiegatoTemp = null;
 		
 		
-		try (PreparedStatement ps = connection.prepareStatement("select * from compagnia c inner join impiegato i on c.id = i.compagnia_id where ragionesociale like ? ")){
+		try (PreparedStatement ps = connection.prepareStatement("select distinct c.id,ragionesociale,fatturatoannuo,datafondazione from compagnia c inner join impiegato i on c.id = i.compagnia_id where ragionesociale like ? ")){
 			
 				
 			ps.setString(1, "%" + fraseInput + "%");
@@ -305,11 +305,11 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 				while (rs.next()) {
 					impiegatoTemp = new Impiegato();
 					impiegatoTemp.setId(rs.getLong("id"));
-					impiegatoTemp.setNome(rs.getString("nome"));
-					impiegatoTemp.setCognome(rs.getString("cognome"));
-					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
-					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
-					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+//					impiegatoTemp.setNome(rs.getString("nome"));
+//					impiegatoTemp.setCognome(rs.getString("cognome"));
+//					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+//					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+//					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
 					
 					compagniaTemp = new Compagnia();
 					compagniaTemp.setId(rs.getLong("id"));

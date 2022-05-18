@@ -54,7 +54,7 @@ public class TestCompagnia {
 			
 			// testFindAllByRagioneSocialeContiene(compagniaDAOInstance);
 			
-			 testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
+			// testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
 			
 			// testFindAllByCompagnia(impiegatoDAOInstance);
 			
