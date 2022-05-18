@@ -55,7 +55,15 @@ public class TestCompagnia {
 			
 			// testFindAllByRagioneSocialeContiene(compagniaDAOInstance);
 			
-			testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
+			//testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
+			
+			// testFindAllByCompagnia(impiegatoDAOInstance);
+			
+			//testCountByDataFondazioneCompagniaGreaterThan(impiegatoDAOInstance);
+			
+			//testFindAllByCompagniaConfatturatoMaggioreDi(impiegatoDAOInstance);
+			
+			testFindAllErroriAssunzione(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -306,7 +314,7 @@ public class TestCompagnia {
 	}
 	
 	
-public static void testFindAllByCodiceFiscaleContiene(CompagniaDAO compagniaDAOInstance) throws Exception {
+	public static void testFindAllByCodiceFiscaleContiene(CompagniaDAO compagniaDAOInstance) throws Exception {
 		
 		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
 		if(elencoVociPresenti.size() < 1) {
@@ -324,7 +332,79 @@ public static void testFindAllByCodiceFiscaleContiene(CompagniaDAO compagniaDAOI
 		for(Compagnia c : result) {
 			System.out.println(c);
 		}
+	}
+
+	
+	public static void testFindAllByCompagnia(ImpiegatoDAO impiegatoDAOInstance) throws Exception{
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testFindByExampleImpiegato : FAILED, non ci sono voci sul DB");
+		}
 		
+		Compagnia compagniaInput = impiegatoDAOInstance.list().get(0).getCompagnia();
+		
+		List<Impiegato> listaResult = impiegatoDAOInstance.findAllByCompagnia(compagniaInput);
+		
+		if(listaResult.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Impiegato c : listaResult) {
+			System.out.println(c);
+		}	
 	}
 	
+	public static void testCountByDataFondazioneCompagniaGreaterThan(ImpiegatoDAO impiegatoDAOInstance) throws Exception{
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testFindByExampleImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataInput = new SimpleDateFormat("dd-MM-yyyy").parse("06-06-2008");
+		
+		List<Impiegato> result = impiegatoDAOInstance.countByDataFondazioneCompagniaGreaterThan(dataInput);
+		
+		if(result.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Impiegato c : result) {
+			System.out.println(c);
+		}
+	}
+	
+	
+	public static void testFindAllByCompagniaConfatturatoMaggioreDi(ImpiegatoDAO impiegatoDAOInstance) throws Exception{
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testFindByExampleImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		int fatturatoDaSuperare = 600000;
+		
+		List<Impiegato> result = impiegatoDAOInstance.findAllByCompagniaConfatturatoMaggioreDi(fatturatoDaSuperare);
+		
+		if(result.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Impiegato c : result) {
+			System.out.println(c);
+		}
+	}
+	
+	
+	public static void testFindAllErroriAssunzione(ImpiegatoDAO impiegatoDAOInstance) throws Exception{
+		List<Impiegato> elencoVociPresenti = impiegatoDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testFindByExampleImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		List<Impiegato> result = impiegatoDAOInstance.findAllErroriAssunzione();
+		
+		for(Impiegato c : result) {
+			System.out.println(c);
+		}
+		
+	}
 }

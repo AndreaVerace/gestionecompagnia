@@ -233,27 +233,176 @@ public class ImpiegatoDAOImpl extends AbstractMySQLDAO implements ImpiegatoDAO {
 	}
 
 	@Override
-	public List<Impiegato> findAllByCompagnia(Compagnia compagniaInput) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Impiegato> findAllByCompagnia(Compagnia compagniaInput) throws Exception {
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(compagniaInput == null || compagniaInput.getId() < 1) {
+			throw new Exception("Compagnia non può essere null.");
+		}
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		Compagnia compagniaTemp = null;
+		
+		try (PreparedStatement ps = connection.prepareStatement("select * from impiegato i where compagnia_id = ?")){
+			
+			ps.setLong(1, compagniaInput.getId());
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					impiegatoTemp = new Impiegato();
+					impiegatoTemp.setId(rs.getLong("id"));
+					impiegatoTemp.setNome(rs.getString("nome"));
+					impiegatoTemp.setCognome(rs.getString("cognome"));
+					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+					
+					compagniaTemp = new Compagnia();
+					compagniaTemp.setId(rs.getLong("id"));
+					
+					
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					result.add(impiegatoTemp);
+				}
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
 	}
 
 	@Override
-	public List<Impiegato> countByDataFondazioneCompagniaGreaterThan(Date dataInput) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Impiegato> countByDataFondazioneCompagniaGreaterThan(Date dataInput) throws Exception {
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(dataInput == null) {
+			throw new Exception("DATA non può essere null.");
+		}
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		Compagnia compagniaTemp = null;
+		
+		try (PreparedStatement ps = connection.prepareStatement("select i.* from impiegato i inner join compagnia c on i.compagnia_id = c.id where datafondazione > ?")){
+			
+			ps.setDate(1, new java.sql.Date(dataInput.getTime()));
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					impiegatoTemp = new Impiegato();
+					impiegatoTemp.setId(rs.getLong("id"));
+					impiegatoTemp.setNome(rs.getString("nome"));
+					impiegatoTemp.setCognome(rs.getString("cognome"));
+					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+					
+					compagniaTemp = new Compagnia();
+					compagniaTemp.setId(rs.getLong("id"));
+					
+					
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					result.add(impiegatoTemp);
+				}
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
 	}
 
 	@Override
-	public List<Impiegato> findAllByCompagniaConfatturatoMaggioreDi(int fatturatoInput) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Impiegato> findAllByCompagniaConfatturatoMaggioreDi(int fatturatoInput) throws Exception {
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		if(fatturatoInput < 1) {
+			throw new Exception("Compagnia non può essere null.");
+		}
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		Compagnia compagniaTemp = null;
+		
+		try (PreparedStatement ps = connection.prepareStatement("select i.* from impiegato i inner join compagnia c on i.compagnia_id = c.id where fatturatoannuo > ?")){
+			
+			ps.setInt(1, fatturatoInput);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					impiegatoTemp = new Impiegato();
+					impiegatoTemp.setId(rs.getLong("id"));
+					impiegatoTemp.setNome(rs.getString("nome"));
+					impiegatoTemp.setCognome(rs.getString("cognome"));
+					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+					
+					compagniaTemp = new Compagnia();
+					compagniaTemp.setId(rs.getLong("id"));
+					
+					
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					result.add(impiegatoTemp);
+				}
+			}
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;	
+		
+		
 	}
 
 	@Override
-	public List<Impiegato> findAllErroriAssunzione() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Impiegato> findAllErroriAssunzione() throws Exception {
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		List<Impiegato> result = new ArrayList<>();
+		Impiegato impiegatoTemp = null;
+		Compagnia compagniaTemp = null;
+		
+		try (PreparedStatement ps = connection.prepareStatement("select i.* from impiegato i inner join compagnia c on i.compagnia_id = c.id where dataassunzione < datafondazione")){
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					impiegatoTemp = new Impiegato();
+					impiegatoTemp.setId(rs.getLong("id"));
+					impiegatoTemp.setNome(rs.getString("nome"));
+					impiegatoTemp.setCognome(rs.getString("cognome"));
+					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+					
+					compagniaTemp = new Compagnia();
+					compagniaTemp.setId(rs.getLong("id"));
+					
+					
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					result.add(impiegatoTemp);
+				}
+			}	
+		}	catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
 	}
 
+	
+	
 }
