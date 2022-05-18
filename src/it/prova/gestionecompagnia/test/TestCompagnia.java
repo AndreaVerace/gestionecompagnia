@@ -44,7 +44,7 @@ public class TestCompagnia {
 			
 			//testDeleteImpiegato(impiegatoDAOInstance);
 			
-			//  ------------------------------testDeleteCompagnia(compagniaDAOInstance); 
+			testDeleteCompagnia(compagniaDAOInstance); 
 			
 			// testFindByExampleCompagnia(compagniaDAOInstance);
 			
@@ -63,7 +63,7 @@ public class TestCompagnia {
 			
 			//testFindAllByCompagniaConfatturatoMaggioreDi(impiegatoDAOInstance);
 			
-			testFindAllErroriAssunzione(impiegatoDAOInstance);
+			//testFindAllErroriAssunzione(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -196,9 +196,10 @@ public class TestCompagnia {
 			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
 		}
 		
-		Compagnia daEliminare = compagniaDAOInstance.list().get(0);
+		Compagnia daEliminare = compagniaDAOInstance.list().get(3);
+		long idInput = compagniaDAOInstance.list().get(3).getId();
 		
-		if(compagniaDAOInstance.verificaSeCompagniaPossiedeimpiegati(daEliminare)  != true) {
+		if(compagniaDAOInstance.verificaSeCompagniaPossiedeimpiegati(idInput)  == false) {
 			throw new Exception("IMPOSSIBILE ELIMINARE COMPAGNIA CON IMPIEGATI A CARICO.");
 		}
 		

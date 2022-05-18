@@ -148,43 +148,43 @@ public class CompagniaDAOImpl extends AbstractMySQLDAO implements CompagniaDAO {
 	}
 	
 	
-	public boolean verificaSeCompagniaPossiedeimpiegati(Compagnia input) throws Exception {
+	public boolean verificaSeCompagniaPossiedeimpiegati(long  idInput) throws Exception {
 		
 		List<Impiegato> listaImp = new ArrayList<>();
 		Impiegato impiegatoTemp = null;
 		Compagnia compagniaTemp = null;
 		
-		try (PreparedStatement ps = connection.prepareStatement("select c.id,i.id from compagnia c full outer join impiegato i on c.id = i.compagnia_id")) {
+		try (PreparedStatement ps = connection.prepareStatement("select c.id,i.id from compagnia c inner join impiegato i on c.id = i.compagnia_id where c.id = ?")) {
 			
-			
+			ps.setLong(1, idInput);
 			
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					impiegatoTemp = new Impiegato();
 					impiegatoTemp.setId(rs.getLong("id"));
-					impiegatoTemp.setNome(rs.getString("nome"));
-					impiegatoTemp.setCognome(rs.getString("cognome"));
-					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
-					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
-					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
+//					impiegatoTemp.setNome(rs.getString("nome"));
+//					impiegatoTemp.setCognome(rs.getString("cognome"));
+//					impiegatoTemp.setCodiceFiscale(rs.getString("codicefiscale"));
+//					impiegatoTemp.setDataNascita(rs.getDate("datanascita"));
+//					impiegatoTemp.setDataAssunzione(rs.getDate("dataassunzione"));
 					
-					listaImp.add(impiegatoTemp);
+					
 					
 					compagniaTemp = new Compagnia();
 					compagniaTemp.setId(rs.getLong("id"));
 					
-					for(int i = 0; i < listaImp.size();i++) {
-						if(compagniaTemp.getId() == listaImp.get(i).getCompagnia().getId()){
-							return false;
-						}
-					}
+					impiegatoTemp.setCompagnia(compagniaTemp);
+					
+					listaImp.add(impiegatoTemp);
+					
+					return false;
 				}
-			}	catch (Exception e) {
-				e.printStackTrace();
-				throw e;
 			}
 		}	return true;
 	}
+
+		
+	
 	
 	
 	@Override
