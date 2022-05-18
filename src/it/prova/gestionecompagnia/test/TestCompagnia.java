@@ -30,9 +30,9 @@ public class TestCompagnia {
 			
 			testListImpiegato(impiegatoDAOInstance);
 			
-			testGetCompagnia(compagniaDAOInstance);
+			// testGetCompagnia(compagniaDAOInstance);
 			
-			testGetImpiegato(impiegatoDAOInstance);
+			// testGetImpiegato(impiegatoDAOInstance);
 			
 			// testUpdateCompagnia(compagniaDAOInstance);
 			
@@ -42,28 +42,27 @@ public class TestCompagnia {
 			
 			// testInsertImpiegato(impiegatoDAOInstance);
 			
-			//testDeleteImpiegato(impiegatoDAOInstance);
+			// testDeleteImpiegato(impiegatoDAOInstance);
 			
-			testDeleteCompagnia(compagniaDAOInstance); 
+			// testDeleteCompagnia(compagniaDAOInstance); 
 			
 			// testFindByExampleCompagnia(compagniaDAOInstance);
 			
 			// testFindByExampleImpiegato(impiegatoDAOInstance);
 			
-			//testFindAllByDataAssunzioneMaggioreDi(compagniaDAOInstance);
-			
+			// testFindAllByDataAssunzioneMaggioreDi(compagniaDAOInstance);
 			
 			// testFindAllByRagioneSocialeContiene(compagniaDAOInstance);
 			
-			//testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
+			 testFindAllByCodiceFiscaleContiene(compagniaDAOInstance);
 			
 			// testFindAllByCompagnia(impiegatoDAOInstance);
 			
-			//testCountByDataFondazioneCompagniaGreaterThan(impiegatoDAOInstance);
+			// testCountByDataFondazioneCompagniaGreaterThan(impiegatoDAOInstance);
 			
-			//testFindAllByCompagniaConfatturatoMaggioreDi(impiegatoDAOInstance);
+			// testFindAllByCompagniaConfatturatoMaggioreDi(impiegatoDAOInstance);
 			
-			//testFindAllErroriAssunzione(impiegatoDAOInstance);
+			// testFindAllErroriAssunzione(impiegatoDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -322,7 +321,7 @@ public class TestCompagnia {
 			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
 		}
 		
-		String iniziale = "VRCNDR";
+		String iniziale = "B";
 		
 		List<Compagnia> result = compagniaDAOInstance.findAllByCodiceFiscaleContiene(iniziale);
 		
