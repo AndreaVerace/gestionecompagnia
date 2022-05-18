@@ -44,11 +44,16 @@ public class TestCompagnia {
 			
 			//testDeleteImpiegato(impiegatoDAOInstance);
 			
-			// // // // testDeleteCompagnia(compagniaDAOInstance); \\ \\ \\ \\ \\
+			//  ------------------------------testDeleteCompagnia(compagniaDAOInstance); 
 			
 			// testFindByExampleCompagnia(compagniaDAOInstance);
 			
-			testFindByExampleImpiegato(impiegatoDAOInstance);
+			// testFindByExampleImpiegato(impiegatoDAOInstance);
+			
+			//testFindAllByDataAssunzioneMaggioreDi(compagniaDAOInstance);
+			
+			
+			// testFindAllByRagioneSocialeContiene(compagniaDAOInstance);
 			
 		}	catch (Exception e) {
 			e.printStackTrace();
@@ -181,14 +186,18 @@ public class TestCompagnia {
 			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
 		}
 		
-		Compagnia daEliminare = compagniaDAOInstance.list().get(3);
+		Compagnia daEliminare = compagniaDAOInstance.list().get(0);
 		
+		if(compagniaDAOInstance.verificaSeCompagniaPossiedeimpiegati(daEliminare)  != true) {
+			throw new Exception("IMPOSSIBILE ELIMINARE COMPAGNIA CON IMPIEGATI A CARICO.");
+		}
 		
 		int result = compagniaDAOInstance.delete(daEliminare);
 		
 		if(result < 1) {
 			throw new Exception("testDeleteImpiegato : FAILED");
 		}
+		
 	}
 	
 	
@@ -252,5 +261,46 @@ public class TestCompagnia {
 		for(Impiegato comp : listaResult) {
 			System.out.println(comp);
 		}
+	}
+	
+	public static void testFindAllByDataAssunzioneMaggioreDi(CompagniaDAO compagniaDAOInstance) throws Exception {
+		
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		Date dataInput = new SimpleDateFormat("dd-MM-yyyy").parse("06-06-2008");
+		
+		List<Compagnia> result = compagniaDAOInstance.findAllByDataAssunzioneMaggioreDi(dataInput);
+		
+		if(result.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Compagnia c : result) {
+			System.out.println(c);
+		}
+	}
+	
+	public static void testFindAllByRagioneSocialeContiene(CompagniaDAO compagniaDAOInstance) throws Exception {
+		
+		List<Compagnia> elencoVociPresenti = compagniaDAOInstance.list();
+		if(elencoVociPresenti.size() < 1) {
+			throw new RuntimeException("testDeleteImpiegato : FAILED, non ci sono voci sul DB");
+		}
+		
+		String iniziale = "BL";
+		
+		List<Compagnia> result = compagniaDAOInstance.findAllByRagioneSocialeContiene(iniziale);
+		
+		if(result.size() < 1) {
+			throw new Exception("SBAGLIATO.");
+		}
+		
+		for(Compagnia c : result) {
+			System.out.println(c);
+		}
+		
 	}
 }
